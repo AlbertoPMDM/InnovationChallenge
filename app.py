@@ -23,6 +23,7 @@ class MplCanvas(FigureCanvasQTAgg):
     Makes a plot widget
     """
     def __init__(self, parent=None, width=1, height=1,dpi = 100):
+        #Creates a 111 plot with one 'graph', it normally auto-adjusts to the size of the window, and resizing doesnt seem to work as in matplotlib
         fig = Figure(figsize=(width,height), dpi = dpi)
         self.axes = fig.add_subplot(111)
         super(MplCanvas, self).__init__(fig)
@@ -34,7 +35,7 @@ class buttonGrid(QGridLayout):
     def __init__(self, buttons, funcs, width = 320, height = 150):
         super().__init__()
 
-        #create and add buttons to layout
+        #create and add buttons to layout, also connects them to a function
         for btnText, pos in buttons.items():
             buttons[btnText] = QPushButton(btnText)
             buttons[btnText].setFixedSize(width,height)
@@ -46,20 +47,29 @@ class timer(QWidget):
     CReate a global timer widget
     """
     def __init__(self):
+        """
+        Constructor of timer
+        """
         super().__init__()
 
+        #Creates a Label that will be updated and used as stopwatch
         self.stopwatch = QLabel()
         self.stopwatch.setStyleSheet("border :3px solid black;")
         self.stopwatch.resize(320,300)
         self.stopwatch.setFont(QFont('Arial', 60))
+
+        #Creates a general Layout
         self.generalLayout = QVBoxLayout()
         self.setLayout(self.generalLayout)
         self.generalLayout.addWidget(self.stopwatch)
 
+        #starts systime variables
         self.startTime = time.time()
         self.endTime = time.time()
         def timeConvert():
-            
+            """
+            Gets the time difference, converts it into HH:MM:SS, and updates the label
+            """
             self.timeLapsed = self.endTime - self.startTime
             
             self.mins = self.timeLapsed // 60
@@ -70,6 +80,7 @@ class timer(QWidget):
 
             self.endTime = time.time()
 
+        #stars a QTimer and connects it to timeConvert()
         self.updater = QtCore.QTimer()
         self.updater.timeout.connect(lambda:timeConvert())
         
@@ -78,15 +89,20 @@ class StartGui(QWidget):
     Extra window/widget for 'start
     """
     def __init__(self):
+        """
+        Constructor of the Start button GUI
+        """
+
         super().__init__()
+        
+        #CReate general Layout for class
         self.generalLayout = QVBoxLayout()
-        self.label = QLabel("INICIAR")
         self.setLayout(self.generalLayout)
 
-        self.generalLayout.addWidget(self.label)
-
+        #CReates a timer class stopwatch, if that makes sense
         self.timer = timer()
 
+        #CReates the start stopwatch button
         self.startButton = (0,0)
         self.startButton = QPushButton()
         self.startButton.setFixedSize(320,150)
@@ -118,16 +134,21 @@ class MainGui(QMainWindow):
         plt.axes.plot([0,1,2,3],[0,1,2,3])
 
         #create buttons
+        #Positions
         self.startButtonSet = {
             "INICIAR":(0,0),
             "RUTINA":(1,0)
         }
+        #Creates two startGui() elements, because buttonGrid class requires functions to be passed, and there are no other buttons for now
         start = StartGui()
         routine = StartGui()
+        #Functions
         self.startButtonFncs = {
             "INICIAR":lambda:start.show,
             "RUTINA":lambda:routine.show
         }
+
+        #Creates the instances of the buttons
         interfaceButtons = buttonGrid(self.startButtonSet, self.startButtonFncs, 320, 150)
         downButton = buttonGrid({"down":(0,0)},{"down":lambda:start.show}, 320, 50)
 
