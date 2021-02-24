@@ -104,11 +104,18 @@ class StartGui(QWidget):
 
         #CReates the start stopwatch button
         self.startButton = (0,0)
-        self.startButton = QPushButton()
+        self.startButton = QPushButton("START")
         self.startButton.setFixedSize(320,150)
         self.startButton.clicked.connect(lambda:self.timer.updater.start(1000))
         self.generalLayout.addWidget(self.timer)
         self.generalLayout.addWidget(self.startButton)
+
+        #create
+        self.stopButton = (0,1)
+        self.stopButton = QPushButton("STOP")
+        self.stopButton.setFixedSize(320,150)
+        self.stopButton.clicked.connect(lambda:self.timer.updater.stop())
+        self.generalLayout.addWidget(self.stopButton)
 
 class MainGui(QMainWindow):
     """
