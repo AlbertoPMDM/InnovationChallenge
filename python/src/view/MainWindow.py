@@ -1,6 +1,7 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget
 from model.ButtonGrid import ButtonGrid
+from view.ExerciseMenu import ExerciseMenu
 
 #Class Imports
 
@@ -32,6 +33,8 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self._centralWidget)
         self._centralWidget.setLayout(self.generalLayout)
 
+        #ExerciseMenu window func
+        ExerciseMenuWindow = ExerciseMenu()
         #button dictionaries
         self.buttonPos ={
             "Exercise":(0,0),
@@ -40,7 +43,7 @@ class MainWindow(QMainWindow):
             "Productivity":(1,1)
         }
         self.buttonFuncs = {
-            "Exercise":lambda:dpass,
+            "Exercise":lambda:ExerciseMenuWindow.show,
             "Sleep":lambda:dpass,
             "Entertainment":lambda:dpass,
             "Productivity":lambda:dpass
